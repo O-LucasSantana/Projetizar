@@ -1,0 +1,101 @@
+body {
+  background: white;
+  color: orange;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 30px;
+}
+
+#titulo-principal {
+  font-size: 3.5rem;
+  color: orange;
+  margin-bottom: 40px;
+}
+
+.formulario {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.campo {
+  flex: 1 1 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px;
+}
+
+label {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: orange;
+}
+
+textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  font-size: 1.1rem;
+  border: 2px solid orange;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+#data-assinatura {
+  font-size: 1.7rem;
+  color: orange;
+  margin-top: 20px;
+}
+
+button {
+  margin-top: 30px;
+  padding: 15px 30px;
+  background: orange;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+button i {
+  font-size: 1.5rem;
+}
+
+button:hover {
+  background: darkorange;
+}
+
+#voltar {
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .formulario {
+    flex-direction: column;
+    align-items: center;
+  }
+  .campo {
+    width: 90%;
+  }
+}
+.tarefa {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.botao-excluir {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+}

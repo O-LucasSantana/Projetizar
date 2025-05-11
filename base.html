@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Projetizar{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Menu de navegação -->
+    <nav>
+        <a href="{{ url_for('index') }}">Início</a>
+        <a href="{{ url_for('objetivo') }}">Objetivo</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('sobre') }}">Sobre</a>
+    </nav>
+
+    <!-- Conteúdo específico da página -->
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Rodapé (opcional) -->
+    <footer>
+        <p>&copy; 2025 Projetizar. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Script -->
+    <script src="{{ url_for('static', filename='js/objetivo.js') }}"></script>
+</body>
+</html>

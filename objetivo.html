@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seu Objetivo</title>
+  <link rel="stylesheet" href="objetivo.css">
+  <style>
+    .sessao-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ffe6cc;
+      color: #a24f00;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+    }
+
+    .botao, .botao-voltar {
+      margin: 10px 0;
+      padding: 10px 20px;
+      border: none;
+      background-color: #ff8800;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .botao:hover, .botao-voltar:hover {
+      background-color: #e67300;
+    }
+
+    .campo {
+      margin-bottom: 15px;
+    }
+
+    .campo textarea {
+      width: 100%;
+      height: 60px;
+      resize: vertical;
+    }
+
+    .tarefa {
+      background-color: #fff8ec;
+      border: 1px solid #f0d6b0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .botao-excluir {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #d9531e;
+    }
+
+    .botao-excluir:hover {
+      color: #a00;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Saudação sem login -->
+  <div id="sessao-box" class="sessao-container">
+    <span id="sessao-usuario">Olá, visitante</span>
+  </div>
+
+  <h1 id="titulo-principal">Objetivo</h1>
+
+  <div class="formulario">
+    <div class="campo">
+      <label for="como">O que?</label>
+      <textarea id="como" placeholder="Descreva o que vai fazer"></textarea>
+    </div>
+
+    <div class="campo">
+      <label for="quando">Quando?</label>
+      <textarea id="quando" placeholder="Quando pretende concluir?"></textarea>
+    </div>
+
+    <div class="campo">
+      <label for="resultados">Resultados</label>
+      <textarea id="resultados" placeholder="Quais serão os resultados?"></textarea>
+    </div>
+
+    <div class="campo">
+      <label for="ajudas">Ajudas</label>
+      <textarea id="ajudas" placeholder="Quem ou o que pode te ajudar?"></textarea>
+    </div>
+  </div>
+
+  <button id="salvarObjetivo" class="botao">💾 Salvar Objetivo</button>
+  <div id="data-assinatura"></div>
+  <button id="voltar" class="botao-voltar">🏠 Início</button>
+
+  <h2>Tarefas Salvas</h2>
+  <div id="lista-tarefas"></div>
+
+  <script src="objetivo.js"></script>
+</body>
+</html>

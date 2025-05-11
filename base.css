@@ -1,0 +1,67 @@
+/* 🔥 Reset básico para garantir que todos os elementos tenham um comportamento consistente */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 🔥 Corpo geral */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 0 20px;
+}
+
+/* 🔥 Barra Sessão */
+.barra-sessao {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border: 2px solid orange;
+  border-radius: 30px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.barra-sessao span {
+  font-weight: bold;
+  color: orange;
+  font-size: 1.1em;
+}
+
+.barra-sessao button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.barra-sessao button:hover {
+  transform: scale(1.2);
+}
+
+/* 🔥 Estilo para formulários */
+input[type="text"], input[type="password"], button {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: orange;
+  color: white;
+  cursor: pointer;
+  font-size: 1.1em;
+}
+
+button:hover {
+  background-color: darkorange;
+}
+
+/* 🔥 Outros estilos comuns podem ser colocados aqui */

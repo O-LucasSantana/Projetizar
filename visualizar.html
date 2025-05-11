@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Visualizar Tarefas</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fffaf5;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .conteudo {
+      max-width: 900px;
+      margin: 120px auto 40px;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: orange;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: darkorange;
+      font-size: 1.8em;
+      margin-top: 40px;
+      border-bottom: 2px solid #ffd1a6;
+      padding-bottom: 5px;
+    }
+
+    .lista-tarefas,
+    .lista-portfolios {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .item {
+      background-color: #fff0dc;
+      padding: 18px 22px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      font-size: 1.1em;
+      line-height: 1.6;
+    }
+
+    .sessao-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ffe6cc;
+      color: #a24f00;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #a24f00;
+      transition: color 0.2s;
+    }
+
+    .logout-btn:hover {
+      color: #d9531e;
+    }
+
+    .botao-voltar {
+      display: block;
+      margin: 40px auto 0;
+      padding: 12px 24px;
+      font-size: 1.1em;
+      background-color: orange;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .botao-voltar:hover {
+      background-color: darkorange;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sessao-box" class="sessao-container">
+    <span id="sessao-usuario">Olá</span>
+    <button id="logout-btn" class="logout-btn" title="Sair" style="display: none;">🚪</button>
+  </div>
+
+  <div class="conteudo">
+    <h1>Minhas Tarefas</h1>
+
+    <h2>Tarefas</h2>
+    <div class="lista-tarefas" id="lista-tarefas">
+      <!-- Tarefas serão inseridas aqui -->
+    </div>
+
+    <h2>Portfólios</h2>
+    <div class="lista-portfolios" id="lista-portfolios">
+      <div class="item">Nenhum portfólio enviado.</div>
+    </div>
+
+    <button class="botao-voltar" onclick="voltarInicio()">🏠 Voltar ao Início</button>
+  </div>
+
+  <script>
+    function voltarInicio() {
+      window.location.href = 'index.html';
+    }
+
+    // Carrega objetivos do localStorage
+    function carregarObjetivosSalvos() {
+      const container = document.getElementById('lista-tarefas');
+      container.innerHTML = '';
+
+      const objetivos = JSON.parse(localStorage.getItem('objetivos') || '[]');
+
+      if (objetivos.length === 0) {
+        container.innerHTML = '<div class="item">Nenhuma tarefa salva.</div>';
+        return;
+      }
+
+      objetivos.forEach((obj) => {
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.innerHTML = `
+          <strong>O que:</strong> ${obj.como || '(não preenchido)'}<br>
+          <strong>Quando:</strong> ${obj.quando || '(não preenchido)'}<br>
+          <strong>Resultados:</strong> ${obj.resultados || '(não preenchido)'}<br>
+          <strong>Ajudas:</strong> ${obj.ajudas || '(não preenchido)'}
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // Sessão (mantém visual apenas)
+    function verificarSessao() {
+      document.getElementById('sessao-usuario').textContent = 'Olá, visitante';
+      document.getElementById('logout-btn').style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      verificarSessao();
+      carregarObjetivosSalvos();
+    });
+  </script>
+
+</body>
+</html>

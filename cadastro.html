@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      padding: 50px;
+      color: #000;
+    }
+
+    h1 {
+      color: orange;
+      font-size: 2.5em;
+    }
+
+    .formulario {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .campo {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 1.2em;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: orange;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: darkorange;
+    }
+
+    /* Caixa de sessão no canto superior direito */
+    .sessao-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ffe6cc;
+      color: #a24f00;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #a24f00;
+      transition: color 0.2s;
+    }
+
+    .logout-btn:hover {
+      color: #d9531e;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Caixa de Sessão -->
+  <div id="sessao-box" class="sessao-container">
+    <span id="sessao-usuario">Olá</span>
+    <button id="logout-btn" class="logout-btn" title="Sair" style="display: none;">🚪</button>
+  </div>
+
+  <h1>Cadastro</h1>
+
+  <div class="formulario">
+    <div class="campo">
+      <label for="novoUsername">Usuário</label>
+      <input type="text" id="novoUsername" placeholder="Digite um nome de usuário">
+    </div>
+
+    <div class="campo">
+      <label for="novaSenha">Senha</label>
+      <input type="password" id="novaSenha" placeholder="Digite uma senha">
+    </div>
+
+    <button id="criarConta">Criar Conta</button>
+    <button id="excluirConta">Excluir Conta</button>
+    <button id="voltarLogin">🔙 Voltar ao Login</button>
+  </div>
+
+<script>
+  async function cadastrar() {
+    const username = document.getElementById('novoUsername').value.trim();
+    const password = document.getElementById('novaSenha').value.trim();
+
+    if (!username || !password) {
+      alert('Preencha todos os campos!');
+      return;
+    }
+
+    try {
+      const resposta = await fetch('http://localhost:5000/cadastrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const resultado = await resposta.json();
+
+      if (resposta.ok) {
+        alert('Conta criada com sucesso!');
+        window.location.href = 'login.html';
+      } else {
+        alert(resultado.message || 'Erro ao criar conta.');
+      }
+    } catch (error) {
+      alert('Erro de conexão. Verifique o servidor.');
+    }
+  }
+
+  async function excluirConta() {
+    const username = document.getElementById('novoUsername').value.trim();
+
+    if (!username) {
+      alert('Digite o nome de usuário para excluir!');
+      return;
+    }
+
+    if (!confirm(`Tem certeza que deseja excluir o usuário "${username}"? Esta ação não pode ser desfeita.`)) {
+      return;
+    }
+
+    try {
+      const resposta = await fetch('http://localhost:5000/deletar_usuario', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+      });
+
+      const resultado = await resposta.json();
+
+      if (resposta.ok) {
+        alert('Usuário excluído com sucesso!');
+        window.location.href = 'login.html';
+      } else {
+        alert(resultado.message || 'Erro ao excluir usuário.');
+      }
+    } catch (error) {
+      alert('Erro de conexão. Verifique o servidor.');
+    }
+  }
+
+  document.getElementById('criarConta').addEventListener('click', cadastrar);
+  document.getElementById('excluirConta').addEventListener('click', excluirConta);
+  document.getElementById('voltarLogin').addEventListener('click', () => {
+    window.location.href = 'login.html';
+  });
+
+  // Verifica se o usuário está logado e mostra nome/sair
+  async function verificarSessao() {
+    try {
+      const resposta = await fetch('http://localhost:5000/usuario_logado', {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      const data = await resposta.json();
+
+      if (resposta.ok && data.username) {
+        document.getElementById('sessao-usuario').textContent = `Olá, ${data.username}`;
+        document.getElementById('logout-btn').style.display = 'inline-block';
+      } else {
+        document.getElementById('sessao-usuario').textContent = 'Olá';
+      }
+    } catch (error) {
+      console.error('Erro ao verificar sessão:', error);
+    }
+  }
+
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    try {
+      await fetch('http://localhost:5000/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+      location.reload();
+    } catch (error) {
+      alert('Erro ao fazer logout');
+    }
+  });
+
+  verificarSessao();
+</script>
+
+</body>
+</html>
