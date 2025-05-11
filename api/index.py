@@ -157,5 +157,5 @@ def usuario_logado():
     else:
         return jsonify({'username': None}), 401
 
-if __name__ == '__main__':
-    app.run(debug=True)
+app = app  # Assim o Vercel entende que esse é o app Flask
+
