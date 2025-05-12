@@ -21,13 +21,29 @@ CORS(app, supports_credentials=True, origins=[
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+import os
+import urllib.parse as up
+
 def get_db_connection():
-    return psycopg2.connect(
-        host='localhost',
-        database='projetizar_db',
-        user='postgres',
-        password='Boto,4zul'
-    )
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL:  # Heroku
+        up.uses_netloc.append("postgres")
+        url = up.urlparse(DATABASE_URL)
+        return psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+    else:  # Local
+        return psycopg2.connect(
+            host='localhost',
+            database='projetizar_db',
+            user='postgres',
+            password='Boto,4zul'
+        )
+
 
 class User(UserMixin):
     def __init__(self, id, username):
