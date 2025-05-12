@@ -47,6 +47,10 @@ def load_user(user_id):
         return User(id=user[0], username=user[1])
     return None
 
+@app.route('/')
+def home():
+    return "Hello, Flask on Heroku!"
+
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar():
     data = request.json
@@ -157,5 +161,7 @@ def usuario_logado():
     else:
         return jsonify({'username': None}), 401
 
-app = app  # Assim o Vercel entende que esse é o app Flask
+if __name__ == '__main__':
+    app.run()
+
 
