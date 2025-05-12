@@ -4,6 +4,8 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 import psycopg2
 import psycopg2.extras
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
+import urllib.parse as up
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'
@@ -21,9 +23,7 @@ CORS(app, supports_credentials=True, origins=[
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-import os
-import urllib.parse as up
-
+# Conexão com o banco que funciona LOCAL e no HEROKU
 def get_db_connection():
     DATABASE_URL = os.environ.get('DATABASE_URL')
     if DATABASE_URL:  # Heroku
@@ -34,7 +34,8 @@ def get_db_connection():
             user=url.username,
             password=url.password,
             host=url.hostname,
-            port=url.port
+            port=url.port,
+            sslmode='require'  # <-- IMPORTANTE para Heroku
         )
     else:  # Local
         return psycopg2.connect(
@@ -43,7 +44,6 @@ def get_db_connection():
             user='postgres',
             password='Boto,4zul'
         )
-
 
 class User(UserMixin):
     def __init__(self, id, username):
@@ -65,7 +65,7 @@ def load_user(user_id):
 
 @app.route('/')
 def home():
-    return "Hello, Flask on Heroku!"
+    return "🚀 Flask App rodando com sucesso!"
 
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar():
@@ -107,11 +107,10 @@ def login():
     else:
         return jsonify({'message': 'Credenciais inválidas!'}), 401
 
-# ✅ REMOVIDO login_required
 @app.route('/salvar_objetivo', methods=['POST'])
 def salvar_objetivo():
     data = request.json
-    usuario_id = data.get('usuario_id')  # Agora vem do frontend
+    usuario_id = data.get('usuario_id')
     como = data.get('como', '')
     quando = data.get('quando', '')
     resultados = data.get('resultados', '')
@@ -130,7 +129,6 @@ def salvar_objetivo():
 
     return jsonify({'mensagem': 'Objetivo salvo com sucesso!'})
 
-# ✅ REMOVIDO login_required
 @app.route('/listar_objetivos', methods=['GET'])
 def listar_objetivos():
     usuario_id = request.args.get('usuario_id')
@@ -178,6 +176,5 @@ def usuario_logado():
         return jsonify({'username': None}), 401
 
 if __name__ == '__main__':
-    app.run()
-
-
+    port = int(os.environ.get('PORT', 5000))  # Heroku precisa disso
+    app.run(host='0.0.0.0', port=port)
