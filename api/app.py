@@ -4,8 +4,6 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 import psycopg2
 import psycopg2.extras
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
-import urllib.parse as up
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'
@@ -23,27 +21,13 @@ CORS(app, supports_credentials=True, origins=[
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Conexão com o banco que funciona LOCAL e no HEROKU
 def get_db_connection():
-    DATABASE_URL = os.environ.get('DATABASE_URL')
-    if DATABASE_URL:  # Heroku
-        up.uses_netloc.append("postgres")
-        url = up.urlparse(DATABASE_URL)
-        return psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port,
-            sslmode='require'  # <-- IMPORTANTE para Heroku
-        )
-    else:  # Local
-        return psycopg2.connect(
-            host='localhost',
-            database='projetizar_db',
-            user='postgres',
-            password='Boto,4zul'
-        )
+    return psycopg2.connect(
+        host='localhost',
+        database='projetizar_db',
+        user='postgres',
+        password='Boto,4zul'
+    )
 
 class User(UserMixin):
     def __init__(self, id, username):
@@ -63,9 +47,10 @@ def load_user(user_id):
         return User(id=user[0], username=user[1])
     return None
 
+# ✅ Corrigido: rota de teste / homepage
 @app.route('/')
 def home():
-    return "🚀 Flask App rodando com sucesso!"
+    return "🚀 API Flask rodando com sucesso!"
 
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar():
@@ -175,6 +160,6 @@ def usuario_logado():
     else:
         return jsonify({'username': None}), 401
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Heroku precisa disso
-    app.run(host='0.0.0.0', port=port)
+# ✅ Bloco para rodar local
+if __name__ == "__main__":
+    app.run(debug=True)
