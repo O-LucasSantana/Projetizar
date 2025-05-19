@@ -51,6 +51,27 @@
       line-height: 1.6;
     }
 
+    .item-portfolio {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      background-color: #fff0dc;
+      padding: 18px 22px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .item-portfolio img {
+      max-width: 180px;
+      max-height: 180px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .info-portfolio {
+      flex: 1;
+    }
+
     .sessao-container {
       display: flex;
       align-items: center;
@@ -115,7 +136,7 @@
 
     <h2>Portfólios</h2>
     <div class="lista-portfolios" id="lista-portfolios">
-      <div class="item">Nenhum portfólio enviado.</div>
+      <!-- Portfólios serão inseridos aqui -->
     </div>
 
     <button class="botao-voltar" onclick="voltarInicio()">🏠 Voltar ao Início</button>
@@ -126,7 +147,13 @@
       window.location.href = 'index.html';
     }
 
-    // Carrega objetivos do localStorage
+    // Sessão
+    function verificarSessao() {
+      document.getElementById('sessao-usuario').textContent = 'Olá, visitante';
+      document.getElementById('logout-btn').style.display = 'none';
+    }
+
+    // Tarefas
     function carregarObjetivosSalvos() {
       const container = document.getElementById('lista-tarefas');
       container.innerHTML = '';
@@ -151,15 +178,47 @@
       });
     }
 
-    // Sessão (mantém visual apenas)
-    function verificarSessao() {
-      document.getElementById('sessao-usuario').textContent = 'Olá, visitante';
-      document.getElementById('logout-btn').style.display = 'none';
+    // Portfólios
+    function carregarPortfoliosSalvos() {
+      const container = document.getElementById('lista-portfolios');
+      container.innerHTML = '';
+
+      const portfolios = JSON.parse(localStorage.getItem('portfolios') || '[]');
+
+      if (portfolios.length === 0) {
+        container.innerHTML = '<div class="item">Nenhum portfólio enviado.</div>';
+        return;
+      }
+
+      portfolios.forEach((port) => {
+        const item = document.createElement('div');
+        item.className = 'item-portfolio';
+
+        if (port.imagem) {
+          const img = document.createElement('img');
+          img.src = port.imagem;
+          img.alt = 'Imagem do portfólio';
+          item.appendChild(img);
+        }
+
+        const info = document.createElement('div');
+        info.className = 'info-portfolio';
+        info.innerHTML = `
+          <strong>Nome:</strong> ${port.nome || '(não preenchido)'}<br>
+          <strong>Contatos:</strong> ${port.contatos || '(não preenchido)'}<br>
+          <strong>Descrição:</strong> ${port.descricao || '(não preenchido)'}<br>
+          <strong>Data:</strong> ${port.data || '(sem data)'}
+        `;
+
+        item.appendChild(info);
+        container.appendChild(item);
+      });
     }
 
     window.addEventListener('DOMContentLoaded', () => {
       verificarSessao();
       carregarObjetivosSalvos();
+      carregarPortfoliosSalvos();
     });
   </script>
 

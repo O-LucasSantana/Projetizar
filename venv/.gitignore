@@ -1,22 +1,26 @@
-# Created by venv; see https://docs.python.org/3/library/venv.html
+# Criado para Python + venv + VS Code
+
 # Ambiente virtual
 venv/
 .env
 
-# Python cache
+# Cache do Python
 __pycache__/
 *.pyc
 *.pyo
 
-# VS Code settings (se usar)
+# Configurações do VS Code
 .vscode/
 
 # Arquivos do sistema
 .DS_Store
 Thumbs.db
 
-# Logs (se algum for criado)
+# Logs
 *.log
 
-# Banco SQLite (não usa, mas sem problema deixar)
+# Banco de dados SQLite
 *.sqlite3
+
+# Arquivo sensível da API
+api/app.py
